@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aelly Najwa</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --beige: #f5ebe0;  
+            --cream: #edede9; 
+            --accent: #8d99ae;
+            --text: #4a4e69;
+            --white: #ffffff;
+            --dark-hero: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { color: var(--text); line-height: 1.7; font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        /* --- NAVIGATION --- */
+        .navbar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1.5rem 10%; background: rgba(245, 235, 224, 0.95); 
+            backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 1000;
+        }
+        .nav-links { display: flex; list-style: none; }
+        .nav-links li a { color: var(--text); text-decoration: none; padding: 0 1.2rem; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+
+        /* --- HERO SECTION --- */
+        #home { 
+            height: 100vh; display: flex; align-items: stretch; overflow: hidden;
+            background-color: var(--cream); 
+        }
+        .hero-image-side { flex: 1; background: url('images/pic1.jpg') center/cover no-repeat; background-color: #ddd; }
+        .hero-text-side { flex: 1; background: var(--dark-hero); display: flex; flex-direction: column; justify-content: center; padding: 0 10%; color: var(--white); }
+        .hero-text-side h1 { font-size: clamp(3.5rem, 8vw, 6rem); line-height: 0.9; margin-bottom: 25px; }
+
+        /* --- SECTION COLORS --- */
+        section { padding: 120px 10%; }
+        #about, #projects, #contact { background-color: var(--beige); }
+        #education, #achievements, #skill { background-color: var(--cream); }
+
+        .section-header h2 { font-size: 3.5rem; text-transform: uppercase; letter-spacing: 4px; }
+        .underline { width: 80px; height: 3px; background: var(--accent); margin: 15px 0 60px; }
+
+        /* --- CARDS & HOVER EFFECTS --- */
+        .edu-grid, .proj-grid, .achieve-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .edu-card, .proj-item, .achieve-card { 
+            background: var(--white); padding: 40px; border: 1px solid rgba(0,0,0,0.05); 
+            transition: all 0.4s ease; cursor: pointer;
+        }
+        .edu-card:hover, .proj-item:hover, .achieve-card:hover { 
+            transform: translateY(-15px) scale(1.02); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+
+        /* --- PROJECT LABELS & CONTAINERS --- */
+        .proj-label { font-weight: 900; font-size: 0.9rem; margin: 40px 0 20px; text-transform: uppercase; color: var(--accent); display: block; }
+        .proj-group-label { font-weight: 900; font-size: 0.9rem; margin-bottom: 20px; text-transform: uppercase; color: var(--accent); display: block; }
+        
+        .graphic-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .flip-box { background: var(--dark-hero); color: white; display: flex; align-items: center; justify-content: center; padding: 20px; text-decoration: none; font-weight: bold; }
+        .design-img { width: 100%; height: 250px; object-fit: cover; border: 5px solid white; transition: 0.3s; }
+        .design-img:hover { transform: scale(1.05); }
+
+        /* --- SOCIAL MEDIA ICONS --- */
+        .social-links { display: flex; gap: 25px; margin-top: 30px; }
+        .social-links a { font-size: 2rem; color: var(--text); transition: 0.3s; }
+        .social-links a:hover { color: var(--accent); transform: translateY(-5px); }
+
+        /* --- SKILLS --- */
+        .skill-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 50px; }
+        .skill-unit { display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .skill-unit:hover { transform: scale(1.3); color: var(--accent); }
+
+        /* --- FOOTER --- */
+        footer { padding: 60px 10%; text-align: center; border-top: 1px solid #ddd; background: var(--cream); }
+
+        /* MODAL SYSTEMS */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { width: 80%; height: 80%; background: white; position: relative; }
+        .close { position: absolute; top: -50px; right: 0; color: white; font-size: 3rem; cursor: pointer; }
+
+        .img-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2500; justify-content: center; align-items: center; cursor: zoom-out; }
+        .img-modal img { max-width: 90%; max-height: 90%; object-fit: contain; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 4px solid white; }
+
+        @media (max-width: 992px) { .graphic-container, .edu-grid, .achieve-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Aelly Najwa</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#projects">Project</a></li>
+            <li><a href="#achievements">Achievement</a></li>
+            <li><a href="#skill">Skill</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <div class="hero-image-side"></div>
+        <div class="hero-text-side">
+            <h1>My<br>Portfolio</h1>
+            <div style="width:100%; height:1px; background:white; margin:20px 0; opacity:0.3;"></div>
+            <p>Full-Stack Developer, Graphic Designer & Video Editor</p>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="split-box" style="display: flex; align-items: center; gap: 50px; margin-bottom: 100px;">
+            <div class="box-img" style="flex: 1;">
+                <img src="images/pic5.jpg" alt="About Me" style="width: 100%; border-radius: 10px;">
+            </div>
+            <div class="box-text" style="flex: 1;">
+                <div class="section-header">
+                    <h2>About Me</h2>
+                    <div class="underline"></div>
+                </div>
+                <p>I am a student specializing in <strong>Information Content Management</strong>. While I have a sharp eye for web design, my core strength lies in <strong>Database Development</strong> and information architecture.</p>
+                <p style="margin-top: 15px;">I enjoy the logic of structuring complex data. My expertise includes building efficient <strong>Database Management Systems</strong>, ensuring that digital content is not just beautiful on the outside, but perfectly organized and high-performing on the inside.</p>
+                <p style="margin-top: 15px;">From <strong>Metadata Introduction</strong> to <strong>Web Archiving</strong>, I focus on the full lifecycle of data. My goal is to manage information assets so they are secure, searchable, and scalable.</p>
+            </div>
+        </div>
+
+        <div class="split-box" style="display:flex; gap:50px; align-items:center; flex-direction:row-reverse; margin-top:80px;">
+            <img src="images/pic3.jpg" style="width:40%;" class="reveal">
+            <div class="reveal">
+                <div class="section-header"><h2>Family Background</h2><div class="underline"></div></div>
+                <p>I am the eldest of three siblings, a role that has shaped my sense of responsibility and leadership. My sister is currently pursuing her <strong>Degree in Science</strong>, while my younger brother is studying at <strong>MRSM Kuching</strong>.</p>
+                <p style="margin-top: 15px;">My late father was a former <strong>GiatMara Electrical Lecturer</strong>. He passed away when I was 14, but his dedication to education and technical skill remains my biggest inspiration. Today, I am driven by the strength of my mother, a resilient single mother and housewife who has been the pillar of our family.</p>
+                <p style="margin-top: 15px;">Growing up in this environment taught me to value knowledge and hard work. I carry my father's passion for teaching and technology into my own journey in <strong>Information Content Management</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="section-header"><h2>Education</h2><div class="underline"></div></div>
+        <div class="edu-grid">
+            <div class="edu-card"><h4>SPM</h4><p>SMK Wira Penrissen Kuching Sarawak 4A 2B 1C</p></div>
+            <div class="edu-card"><h4>DIPLOMA</h4><p>Information Management 2022-2025 CGPA: 3.43</p></div>
+            <div class="edu-card"><h4>DEGREE</h4><p>Bachelor of Information Science (Information Content Management) (Hons) (CGPA: 3.6).</p></div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="section-header"><h2>Projects</h2><div class="underline"></div></div>
+        
+        <span class="proj-group-label">Web Development</span>
+        <div class="proj-grid">
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 12px; overflow: hidden; padding: 20px; position: relative;">
+                <div style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; background: #fff; position: relative;">
+                    <iframe src="https://aellyraes.github.io/japangicafe/" style="width: 400%; height: 400%; border: none; transform: scale(0.25); transform-origin: 0 0; pointer-events: none;"></iframe>
+                </div>
+                <h4 style="margin-bottom: 10px;">Japangi Cafe</h4>
+                <button onclick="window.open('https://aellyraes.github.io/japangicafe/', '_blank')" style="background: var(--text); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; position: relative; z-index: 20;">Visit Website</button>
+            </div>
+
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 12px; overflow: hidden; padding: 20px; transition: transform 0.4s ease;">
+                <div class="preview-container" style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; background: #fff; position: relative;">
+                    <img src="images/pic4.png" alt="Bau Town Sarawak Preview" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);">
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(74, 78, 105, 0.2); opacity: 0; transition: opacity 0.4s ease; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-external-link-alt" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <h4 style="margin-bottom: 10px;">Bau Town Sarawak</h4>
+                <button onclick="window.open('http://bautownsarawak.infinityfreeapp.com/', '_blank')" style="background: var(--text); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; z-index: 10;">Visit Website</button>
+            </div>
+
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 12px; overflow: hidden; padding: 20px; position: relative;">
+                <div style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; background: #fff; position: relative;">
+                    <iframe src="https://aellyraes.github.io/arrisacollection/" style="width: 400%; height: 400%; border: none; transform: scale(0.25); transform-origin: 0 0; pointer-events: none;"></iframe>
+                </div>
+                <h4 style="margin-bottom: 10px;">Arrisa Collection</h4>
+                <button onclick="window.open('https://aellyraes.github.io/arrisacollection/', '_blank')" style="background: var(--text); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; position: relative; z-index: 20;">Visit Website</button>
+            </div>
+        </div>
+
+        <style>
+            .proj-item:hover .preview-container img { transform: scale(1.1); }
+            .proj-item:hover .hover-overlay { opacity: 1; }
+            .proj-item:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--beige-dark); }
+        </style>
+
+        <span class="proj-label">Database Development</span>
+        <div class="proj-grid">
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 12px; overflow: hidden; padding: 20px; transition: transform 0.4s ease;">
+                <div class="preview-container" style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; background: #fff; position: relative;">
+                    <img src="images/capstone.png" alt="Capstone Database Preview" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);">
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(74, 78, 105, 0.2); opacity: 0; transition: opacity 0.4s ease; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-database" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <h4 style="margin-bottom: 10px;">Capstone Database</h4>
+                <button onclick="window.open('https://ricomtrx.com/db263ag3/', '_blank')" style="background: var(--text); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; z-index: 10;">Visit Database</button>
+            </div>
+
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 12px; overflow: hidden; padding: 20px; transition: transform 0.4s ease;">
+                <div class="preview-container" style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; background: #fff; position: relative;">
+                    <img src="images/lms.png" alt="iLearn LMS Preview" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);">
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(74, 78, 105, 0.2); opacity: 0; transition: opacity 0.4s ease; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-server" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <h4 style="margin-bottom: 10px;">Learning Management System iLearn (LMS)</h4>
+                <button onclick="window.open('https://ilearnlms.infinityfreeapp.com/?i=1', '_blank')" style="background: var(--text); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; z-index: 10;">Visit Database</button>
+            </div>
+        </div>
+
+        <span class="proj-label">Graphic Design</span>
+        <div class="proj-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 12px; overflow: hidden; padding: 20px;">
+                <div style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px; background: #fff; position: relative;">
+                    <iframe src="https://heyzine.com/flip-book/896b6c3961.html" style="width: 400%; height: 400%; border: none; transform: scale(0.25); transform-origin: 0 0; pointer-events: none;"></iframe>
+                </div>
+                <h4 style="margin-bottom: 10px;">Aram Raon Magazine</h4>
+                <button onclick="window.open('https://heyzine.com/flip-book/896b6c3961.html', '_blank')" style="background: var(--text); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; position: relative; z-index: 20;">View Flipbook</button>
+            </div>
+
+            <div class="proj-item" style="display: flex; flex-direction: column; align-items: center; padding: 20px; justify-content: space-between;">
+                <img src="images/pic6.png" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="openModalImage(this.src)" title="Click to view large">
+                <h4 style="margin-top: 20px;">Kuching Waterboard Hari Kebangsaan Poster</h4>
+            </div>
+        </div>
+    </section>
+
+    <section id="achievements">
+        <div class="section-header"><h2>Achievements</h2><div class="underline"></div></div>
+        <div class="achieve-grid">
+            <div class="achieve-card" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="font-size: 2.5rem; color: #d4af37;"><i class="fas fa-trophy"></i></div>
+                <h3 style="font-size: 1.4rem; color: var(--text);">First Place</h3>
+                <p style="font-size: 0.95rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px;">Digital Publishing</p>
+                <p style="font-size: 0.9rem; color: var(--text); line-height: 1.5;">Achieved 1st place recognition leveraging advanced visual design mechanics inside Canva layouts.</p>
+            </div>
+            
+            <div class="achieve-card" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="font-size: 2.5rem; color: #c0c0c0;"><i class="fas fa-medal"></i></div>
+                <h3 style="font-size: 1.4rem; color: var(--text);">Third Place</h3>
+                <p style="font-size: 0.95rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px;">Multimedia Production</p>
+                <p style="font-size: 0.9rem; color: var(--text); line-height: 1.5;">Awarded 3rd place position utilizing comprehensive tracking, sequence editing, and audio assembly within Adobe Premiere Pro.</p>
+            </div>
+
+            <div class="achieve-card" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="font-size: 2.5rem; color: #4a4e69;"><i class="fas fa-award"></i></div>
+                <h3 style="font-size: 1.4rem; color: var(--text);">Main Developer</h3>
+                <p style="font-size: 0.95rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px;">Book Borrowing System</p>
+                <p style="font-size: 0.9rem; color: var(--text); line-height: 1.5;">Engineered the primary system infrastructure deployed for PERYATIM Sarawak during their regional outreach event program.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skill">
+        <div class="section-header"><h2>Technical Skills</h2><div class="underline"></div></div>
+        
+        <span class="proj-label" style="display: block; margin-bottom: 20px; font-weight: 700;">Database & Information Management</span>
+        <div class="skill-wrap" style="margin-bottom: 50px;">
+            <div class="skill-unit"><i class="devicon-mysql-plain colored" style="font-size:3.5rem"></i><span>MySQL</span></div>
+            <div class="skill-unit"><i class="fas fa-database" style="font-size:3.5rem; color: #336791;"></i><span>SQL</span></div>
+            <div class="skill-unit"><i class="fas fa-sitemap" style="font-size:3.5rem; color: #4a4e69;"></i><span>Information Architecture</span></div>
+        </div>
+
+        <span class="proj-label" style="display: block; margin-bottom: 20px; font-weight: 700;">Programming & Web Development</span>
+        <div class="skill-wrap" style="margin-bottom: 50px;">
+            <div class="skill-unit"><i class="devicon-php-plain colored" style="font-size:3rem"></i><span>PHP</span></div>
+            <div class="skill-unit"><i class="devicon-java-plain colored" style="font-size:3rem"></i><span>Java</span></div>
+            <div class="skill-unit"><i class="devicon-cplusplus-plain colored" style="font-size:3rem"></i><span>C++</span></div>
+            <div class="skill-unit"><i class="devicon-python-plain colored" style="font-size:3rem"></i><span>Python</span></div>
+            <div class="skill-unit"><i class="devicon-html5-plain colored" style="font-size:3rem"></i><span>HTML5</span></div>
+            <div class="skill-unit"><i class="devicon-css3-plain colored" style="font-size:3rem"></i><span>CSS3</span></div>
+            <div class="skill-unit"><i class="fas fa-code" style="font-size:3rem; color: #ff9900;"></i><span>XML</span></div>
+        </div>
+
+        <span class="proj-label" style="display: block; margin-bottom: 20px; font-weight: 700;">Apps & Mobile Systems</span>
+        <div class="skill-wrap" style="margin-bottom: 50px;">
+            <div class="skill-unit"><i class="fas fa-mobile-alt" style="font-size:3rem; color: #45d1fd;"></i><span>FlutterFlow</span></div>
+            <div class="skill-unit"><i class="devicon-dart-plain colored" style="font-size:3rem;"></i><span>Dart Programming</span></div>
+        </div>
+
+        <span class="proj-label" style="display: block; margin-bottom: 20px; font-weight: 700;">Data Analytics</span>
+        <div class="skill-wrap" style="margin-bottom: 50px;">
+            <div class="skill-unit"><i class="fas fa-chart-bar" style="font-size:3rem; color: #4a4e69;"></i><span>Data Analytic</span></div>
+            <div class="skill-unit"><i class="fas fa-file-excel" style="font-size:3rem; color: #1f7246;"></i><span>Excel</span></div>
+            <div class="skill-unit"><i class="fas fa-broom" style="font-size:3rem; color: #f07f19;"></i><span>OpenRefine</span></div>
+            <div class="skill-unit"><i class="fas fa-th-large" style="font-size:3rem; color: #e12d29;"></i><span>Tableau</span></div>
+        </div>
+
+        <span class="proj-label" style="display: block; margin-bottom: 20px; font-weight: 700;">Content & Design</span>
+        <div class="skill-wrap">
+            <div class="skill-unit"><i class="fas fa-video" style="font-size:3rem; color: #ff0000;"></i><span>Video Editing</span></div>
+            <div class="skill-unit"><i class="fas fa-file-code" style="font-size:3rem; color: #25d366;"></i><span>Content Management</span></div>
+            <div class="skill-unit"><i class="fas fa-palette" style="font-size:3rem; color: #00c4cc;"></i><span>Canva</span></div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-header"><h2>Contact</h2><div class="underline"></div></div>
+        <div style="max-width:600px;">
+            <p>Email: aellyraesliey19@gmail.com</p>
+            </div>
+            <form action="https://formspree.io/f/aellyraesliey19@gmail.com" method="POST" style="margin-top:30px;">
+                <input type="text" placeholder="Your Name" style="width:100%; padding:15px; margin-bottom:10px;">
+                <textarea placeholder="Your Message" rows="4" style="width:100%; padding:15px; margin-bottom:10px;"></textarea>
+                <button type="submit" style="padding:15px 40px; background:var(--dark-hero); color:white; border:none; cursor:pointer;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMod()">&times;</span>
+            <iframe id="frame" src="" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <div id="imageViewerModal" class="img-modal" onclick="closeModalImage()">
+        <img id="largeImageTarget" src="" alt="Expanded View">
+    </div>
+
+    <footer>
+        <p>&copy; <span id="year"></span> AELLYRAESLIEY</p>
+        <div id="malaysia-time" style="font-weight:bold; margin-top:10px;"></div>
+        <div class="social-links" style="justify-content:center; margin-top:10px;">
+        </div>
+    </footer>
+
+    <script>
+        function openMod(url) { document.getElementById('modal').style.display='flex'; document.getElementById('frame').src=url; }
+        function closeMod() { document.getElementById('modal').style.display='none'; document.getElementById('frame').src=''; }
+        
+        function openModalImage(src) {
+            document.getElementById('largeImageTarget').src = src;
+            document.getElementById('imageViewerModal').style.display = 'flex';
+        }
+        function closeModalImage() {
+            document.getElementById('imageViewerModal').style.display = 'none';
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const options = { timeZone: 'Asia/Kuala_Lumpur', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('malaysia-time').innerText = now.toLocaleString('en-MY', options);
+            document.getElementById('year').innerText = now.getFullYear();
+        }
+        setInterval(updateClock, 1000); updateClock();
+    </script>
+</body>
+</html>
